@@ -8,4 +8,6 @@ Out of the box, log4j2 will automatically provide a simple configuration, if you
 To start logging messages using this basic configuration, all you need to do is obtain a Logger instance using the LogManager class:
 <pre class="prettyprint prettyprinted" style=""><span class="kwd">private</span><span class="pln"> </span><span class="kwd">static</span><span class="pln"> </span><span class="typ">Logger</span><span class="pln"> logger </span><span class="pun">=</span><span class="pln"> </span><span class="typ">LogManager</span><span class="pun">.</span><span class="pln">getLogger</span><span class="pun">(</span><span class="typ">MyService</span><span class="pun">.</span><span class="kwd">class</span><span class="pun">);</span></pre>
 
+Then you can use the logger object with methods corresponding to the log level you want:
 
+logger.info("This is information message");
