@@ -135,22 +135,128 @@ rfLogger</span><span class="pun">.</span><span class="pln">info</span><span clas
 <p>Another very common way to structure the hierarchy of these loggers is based on the Java class:</p>
 <pre class="prettyprint prettyprinted" style=""><span class="typ">Logger</span><span class="pln"> logger </span><span class="pun">=</span><span class="pln"> </span><span class="typ">LogManager</span><span class="pun">.</span><span class="pln">getLogger</span><span class="pun">(</span><span class="typ">MyServiceTest</span><span class="pun">.</span><span class="kwd">class</span><span class="pun">);</span></pre>
 
+<h3><strong>Using Lookups</strong></h3><p>Lookups represent a way to <strong>insert external values into the log4j2 configuration</strong>. We’ve already seen an example of the date lookup in the <em>RollingFileAppender</em> configuration:</p>
+<pre class="prettyprint prettyprinted" style=""><span class="tag">&lt;RollingFile</span><span class="pln"> </span><span class="atn">name</span><span class="pun">=</span><span class="atv">"RollingFileAppender"</span><span class="pln"> </span><span class="atn">fileName</span><span class="pun">=</span><span class="atv">"logs/app.log"</span><span class="pln">
+  </span><span class="atn">filePattern</span><span class="pun">=</span><span class="atv">"logs/${date:yyyy-MM}/app-%d{MM-dd-yyyy}-%i.log.gz"</span><span class="tag">&gt;</span></pre>
+  <p>The <em>${date:yyy-MM}</em> lookup will insert the current date into the file name, while the preceding <em>$</em>&nbsp;is an escape character, to insert the lookup expression into the <em>filePattern</em> attribute.</p>.
+  <p>You can also insert System properties values into log4j2 configuration using the format <em>${sys:property_name}</em>:</p><pre class="prettyprint prettyprinted" style=""><span class="tag">&lt;File</span><span class="pln"> </span><span class="atn">name</span><span class="pun">=</span><span class="atv">"ApplicationLog"</span><span class="pln"> </span><span class="atn">fileName</span><span class="pun">=</span><span class="atv">"${sys:path}/app.log"</span><span class="tag">/&gt;</span></pre>
+  <p>Another type of information you can lookup and insert is Java environment information:</p>
+  <pre class="prettyprint prettyprinted" style=""><span class="tag">&lt;PatternLayout</span><span class="pln"> </span><span class="atn">header</span><span class="pun">=</span><span class="atv">"${java:version} - ${java:os}"</span><span class="tag">&gt;</span><span class="pln">
+    </span><span class="tag">&lt;Pattern&gt;</span><span class="pln">%d %m%n</span><span class="tag">&lt;/Pattern&gt;</span><span class="pln">
+</span><span class="tag">&lt;/PatternLayout&gt;</span></pre>
+<p>You can find more details on the kind of data you can insert through lookups in the <a href="https://logging.apache.org/log4j/2.x/manual/lookups.html" target="_blank" rel="noopener noreferrer">log4j2 documentation</a>.</p>
 
+<h3><strong>Programmatic Configuration</strong></h3>
 
+<p>Besides configuration files, log4j2 can also be configured programmatically. There are a few different ways to do that:</p>
+<ul>
+<li>create a custom <em>ConfigurationFactory</em></li>
+<li>use the <em>Configurator</em> class</li>
+<li>modify the configuration after initialization</li>
+<li>combine properties files and programmatic configuration</li>
+</ul>
+<p>Let’s take a look at how to configure a layout and appender programmatically:</p>
+<pre class="prettyprint prettyprinted" style=""><span class="typ">Loggerj</span><span class="pln"> ctx </span><span class="pun">=</span><span class="pln"> </span><span class="pun">(</span><span class="typ">LoggerContext</span><span class="pun">)</span><span class="pln"> </span><span class="typ">LogManager</span><span class="pun">.</span><span class="pln">getContext</span><span class="pun">(</span><span class="kwd">false</span><span class="pun">);</span><span class="pln">
+</span><span class="typ">Configuration</span><span class="pln"> config </span><span class="pun">=</span><span class="pln"> ctx</span><span class="pun">.</span><span class="pln">getConfiguration</span><span class="pun">();</span><span class="pln">
 
+</span><span class="typ">PatternLayout</span><span class="pln"> layout </span><span class="pun">=</span><span class="pln"> </span><span class="typ">PatternLayout</span><span class="pun">.</span><span class="pln">newBuilder</span><span class="pun">()</span><span class="pln">
+  </span><span class="pun">.</span><span class="pln">withConfiguration</span><span class="pun">(</span><span class="pln">config</span><span class="pun">)</span><span class="pln">
+  </span><span class="pun">.</span><span class="pln">withPattern</span><span class="pun">(</span><span class="str">"%d{HH:mm:ss.SSS} %level %msg%n"</span><span class="pun">)</span><span class="pln">
+  </span><span class="pun">.</span><span class="pln">build</span><span class="pun">();</span><span class="pln">
 
+</span><span class="typ">Appender</span><span class="pln"> appender </span><span class="pun">=</span><span class="pln"> </span><span class="typ">FileAppender</span><span class="pun">.</span><span class="pln">newBuilder</span><span class="pun">()</span><span class="pln">
+  </span><span class="pun">.</span><span class="pln">setConfiguration</span><span class="pun">(</span><span class="pln">config</span><span class="pun">)</span><span class="pln">
+  </span><span class="pun">.</span><span class="pln">withName</span><span class="pun">(</span><span class="str">"programmaticFileAppender"</span><span class="pun">)</span><span class="pln">
+  </span><span class="pun">.</span><span class="pln">withLayout</span><span class="pun">(</span><span class="pln">layout</span><span class="pun">)</span><span class="pln">
+  </span><span class="pun">.</span><span class="pln">withFileName</span><span class="pun">(</span><span class="str">"java.log"</span><span class="pun">)</span><span class="pln">
+  </span><span class="pun">.</span><span class="pln">build</span><span class="pun">();</span><span class="pln">
+    
+appender</span><span class="pun">.</span><span class="pln">start</span><span class="pun">();</span><span class="pln">
+config</span><span class="pun">.</span><span class="pln">addAppender</span><span class="pun">(</span><span class="pln">appender</span><span class="pun">);</span></pre>
+<p>Next, you can define a logger using the <em>LoggerConfig</em> class, associate the appender to it, and update the configuration:</p>
+<pre class="prettyprint prettyprinted" style=""><span class="typ">AppenderRef</span><span class="pln"> </span><span class="kwd">ref</span><span class="pln"> </span><span class="pun">=</span><span class="pln"> </span><span class="typ">AppenderRef</span><span class="pun">.</span><span class="pln">createAppenderRef</span><span class="pun">(</span><span class="str">"programmaticFileAppender"</span><span class="pun">,</span><span class="pln"> </span><span class="kwd">null</span><span class="pun">,</span><span class="pln"> </span><span class="kwd">null</span><span class="pun">);</span><span class="pln">
+</span><span class="typ">AppenderRef</span><span class="pun">[]</span><span class="pln"> refs </span><span class="pun">=</span><span class="pln"> </span><span class="kwd">new</span><span class="pln"> </span><span class="typ">AppenderRef</span><span class="pun">[]</span><span class="pln"> </span><span class="pun">{</span><span class="pln"> </span><span class="kwd">ref</span><span class="pln"> </span><span class="pun">};</span><span class="pln">
 
+</span><span class="typ">LoggerConfig</span><span class="pln"> loggerConfig </span><span class="pun">=</span><span class="pln"> </span><span class="typ">LoggerConfig</span><span class="pln">
+  </span><span class="pun">.</span><span class="pln">createLogger</span><span class="pun">(</span><span class="kwd">false</span><span class="pun">,</span><span class="pln"> </span><span class="typ">Level</span><span class="pun">.</span><span class="pln">INFO</span><span class="pun">,</span><span class="pln"> </span><span class="str">"programmaticLogger"</span><span class="pun">,</span><span class="pln"> </span><span class="str">"true"</span><span class="pun">,</span><span class="pln"> refs</span><span class="pun">,</span><span class="pln"> </span><span class="kwd">null</span><span class="pun">,</span><span class="pln"> config</span><span class="pun">,</span><span class="pln"> </span><span class="kwd">null</span><span class="pun">);</span><span class="pln">
+loggerConfig</span><span class="pun">.</span><span class="pln">addAppender</span><span class="pun">(</span><span class="pln">appender</span><span class="pun">,</span><span class="pln"> </span><span class="kwd">null</span><span class="pun">,</span><span class="pln"> </span><span class="kwd">null</span><span class="pun">);</span><span class="pln">
+config</span><span class="pun">.</span><span class="pln">addLogger</span><span class="pun">(</span><span class="str">"programmaticLogger"</span><span class="pun">,</span><span class="pln"> loggerConfig</span><span class="pun">);</span><span class="pln">
+ctx</span><span class="pun">.</span><span class="pln">updateLoggers</span><span class="pun">();</span></pre>
+<p>Then, you can start using the logger as usual:</p>
+<pre class="prettyprint prettyprinted" style=""><span class="typ">Logger</span><span class="pln"> pLogger </span><span class="pun">=</span><span class="pln"> </span><span class="typ">LogManager</span><span class="pun">.</span><span class="pln">getLogger</span><span class="pun">(</span><span class="str">"programmaticLogger"</span><span class="pun">);</span><span class="pln">
+pLogger</span><span class="pun">.</span><span class="pln">info</span><span class="pun">(</span><span class="str">"Programmatic Logger Message"</span><span class="pun">);</span></pre>
+<p>This style of fluent API can lead to a quicker development and iteration on more complex logging configurations because you’re now benefiting from <strong>the benefits of working directly with Java code</strong>.</p>
+<p>However, given that XML can still be more readable and compact, you can often develop the configuration programmatically and then convert it to XML when everything’s done.</p>
+<p><span data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;Try Stackify's free code profiler, Prefix, to write better code on your workstation. Prefix works with .NET, Java, PHP, Node.js, Ruby, and Python. &quot;}" data-sheets-userformat="{&quot;2&quot;:769,&quot;3&quot;:{&quot;1&quot;:0},&quot;11&quot;:4,&quot;12&quot;:0}">Try Stackify’s free code profiler, <a href="https://stackify.com/prefix/" target="_blank" rel="noopener noreferrer">Prefix</a>, to write better code on your workstation. Prefix works with .NET, Java, PHP, Node.js, Ruby, and Python. </span></p>
+<h3><strong>Custom Log Levels</strong></h3><p>The built-in log levels for log4j2 are:</p>
+<ul>
+<li>OFF</li>
+<li>FATAL</li>
+<li>ERROR</li>
+<li>WARN</li>
+<li>INFO</li>
+<li>DEBUG</li>
+<li>TRACE</li>
+<li>ALL</li>
+</ul>
+<p>In addition to these, you can also define a custom log level according to your application needs.</p>
+<p>For example, to define this new log level, you can make use of the <em>Level.forName()</em>&nbsp;API – specifying the new level name and an integer that represents the place of the level in the log levels hierarchy:</p>
+<pre class="prettyprint prettyprinted" style=""><span class="typ">Level</span><span class="pln"> myLevel </span><span class="pun">=</span><span class="pln"> </span><span class="typ">Level</span><span class="pun">.</span><span class="pln">forName</span><span class="pun">(</span><span class="str">"NEW_LEVEL"</span><span class="pun">,</span><span class="pln"> </span><span class="lit">350</span><span class="pun">);</span></pre>
+<p>To determine what integer value to use, you can have a look at the values defined for the other log levels in the <a href="https://logging.apache.org/log4j/2.x/manual/customloglevels.html" target="_blank" rel="noopener noreferrer">log4j2 documentation</a>:</p>
+<p><img src="https://stackify.com/wp-content/uploads/2017/06/logs-300x270.png" alt="" width="300" height="270" class="alignnone size-medium wp-image-11871 no-lazyload"></p>
+<p>The <em>350</em> value puts the level between WARN and INFO, which means the messages will be displayed when the level is set to INFO or above.</p>
+<p>To log a message at the custom level, you need to use the<em> log()</em> method:</p>
+<pre class="prettyprint prettyprinted" style=""><span class="pln">logger</span><span class="pun">.</span><span class="pln">log</span><span class="pun">(</span><span class="pln">myLevel</span><span class="pun">,</span><span class="pln"> </span><span class="str">"Custom Level Message"</span><span class="pun">);</span></pre>
+<p>The equivalent XML configuration could be:</p>
+<pre class="prettyprint prettyprinted" style=""><span class="tag">&lt;CustomLevels&gt;</span><span class="pln">
+    </span><span class="tag">&lt;CustomLevel</span><span class="pln"> </span><span class="atn">name</span><span class="pun">=</span><span class="atv">"NEW_XML_LEVEL"</span><span class="pln"> </span><span class="atn">intLevel</span><span class="pun">=</span><span class="atv">"350"</span><span class="pln"> </span><span class="tag">/&gt;</span><span class="pln">
+</span><span class="tag">&lt;/CustomLevels&gt;</span></pre>
 
+<p>Then it can be used via the standard <em>log&nbsp;</em>API:</p>
+<pre class="prettyprint prettyprinted" style=""><span class="pln">logger</span><span class="pun">.</span><span class="pln">log</span><span class="pun">(</span><span class="typ">Level</span><span class="pun">.</span><span class="pln">getLevel</span><span class="pun">(</span><span class="str">"NEW_XML_LEVEL"</span><span class="pun">),</span><span class="str">"Custom XML Level Message"</span><span class="pun">);</span></pre>
+<p>The new custom levels will be displayed in the same way as the standard ones:</p>
+<pre class="prettyprint prettyprinted" style=""><span class="lit">11</span><span class="pun">:</span><span class="lit">28</span><span class="pun">:</span><span class="lit">23.558</span><span class="pln"> </span><span class="pun">[</span><span class="pln">main</span><span class="pun">]</span><span class="pln"> NEW_LEVEL </span><span class="pun">-</span><span class="pln"> </span><span class="typ">Custom</span><span class="pln"> </span><span class="typ">Level</span><span class="pln"> </span><span class="typ">Message</span><span class="pln">
+</span><span class="lit">11</span><span class="pun">:</span><span class="lit">28</span><span class="pun">:</span><span class="lit">23.559</span><span class="pln"> </span><span class="pun">[</span><span class="pln">main</span><span class="pun">]</span><span class="pln"> NEW_XML_LEVEL </span><span class="pun">-</span><span class="pln"> </span><span class="typ">Custom</span><span class="pln"> XML </span><span class="typ">Level</span><span class="pln"> </span><span class="typ">Message</span></pre>
 
+<h3><strong>Migrating from Log4j 1.x</strong></h3>
+<p>If you’re migrating an application using the 1.x version of the library to the current 2.x version, there are a couple of routes you can follow:</p>
+<ul>
+<li>use the log4j 1.x bridge</li>
+<li>manually update the API and the configuration</li>
+</ul>
 
+<p>Using the bridge is trivial. You only need to replace the log4j dependency with <a href="https://search.maven.org/#search%7Cga%7C1%7Ca%3A%22log4j-1.2-api%22%20AND%20g%3A%22org.apache.logging.log4j%22" target="_blank" rel="noopener noreferrer">log4j-1.2-api</a> library:</p>
 
+<pre class="prettyprint prettyprinted" style=""><span class="tag">&lt;dependency&gt;</span><span class="pln">
+&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="tag">&lt;groupId&gt;</span><span class="pln">org.apache.logging.log4j</span><span class="tag">&lt;/groupId&gt;</span><span class="pln">
+&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="tag">&lt;artifactId&gt;</span><span class="pln">log4j-1.2-api</span><span class="tag">&lt;/artifactId&gt;</span><span class="pln">
+&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="tag">&lt;version&gt;</span><span class="pln">2.8.2</span><span class="tag">&lt;/version&gt;</span><span class="pln">
+</span><span class="tag">&lt;/dependency&gt;</span></pre>
 
+<p>While this is the faster method, <strong>it has the disadvantage of being limited in the type of configuration that can be converted</strong>.</p>
 
+<p>The manual method is, of course, more work, but will eventually lead to a more flexible and powerful logging solution.</p>
+<p>Here are some of the most common type of changes you’ll have to do:</p>
+<ul>
+<li>change the package from&nbsp;<em>org.apache.log4j</em> to&nbsp;<em>org.apache.logging.log4j</em></li>
+<li>change instances of <em>Logger.getLogger()</em> and <em>Logger.getRootLogger()</em> to <em>LogManager.getLogger()</em> and <em>LogManager.getRootLogger()</em></li>
+<li>change <em>Logger.getEffectiveLevel()</em> to <em>Logger.getLevel()</em></li>
+<li>replace <em>Logger.setLevel()</em> calls with <em>Configurator.setLevel()</em></li>
+<li>replace <em>&lt;log4j2:configuration&gt;</em> tag with<em> &lt;Configuration&gt;</em></li>
+<li>replace<em> &lt;appender&gt;</em> tag with a tag corresponding to the type of the appender, such as <em>&lt;Console&gt;</em></li>
+<li>replace <em>&lt;layout&gt;</em> tag with a tag corresponding to the type of the layout, such as <em>&lt;PatternLayout&gt;</em></li>
+<li>replace <em>&lt;appender-ref&gt;</em> tag with <em>&lt;AppenderRef&gt;</em></li>
+</ul>
 
+<h3><strong>Conclusion</strong></h3>
 
+<p>Log files are critical in any production environment, and choosing a good logging solution can be the difference between spending 5 minutes and spending a full day to understand a problem in production.</p>
 
+<p><strong>Log4j2 is a powerful and robust logging solution for modern Java applications</strong>, with a wide range of configuration options.</p>
 
+<p>It allows for easy configuration of advanced logging best practices such as rolling files, different types of logging output destinations, support for&nbsp;<a href="https://stackify.com/what-is-structured-logging-and-why-developers-need-it/">structured logging</a> formats such as JSON or XML, using multiple loggers and filters, and custom log levels.</p>
 
+<p>Finally, when you need to go beyond manually analyzing log data, definitely check out the logging capabilities included in <a href="https://stackify.com/retrace/">Retrace</a> APM.</p>
 
 
 
