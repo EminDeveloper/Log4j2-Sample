@@ -10,4 +10,4 @@ To start logging messages using this basic configuration, all you need to do is 
 
 Then you can use the logger object with methods corresponding to the log level you want:
 
-logger.info("This is information message");
+<pre class="prettyprint prettyprinted" style=""><span class="pln">logger</span><span class="pun">.</span><span class="pln">info</span><span class="pun">(</span><span class="str">"This is information message"</span><span class="pun">);</span></pre>
