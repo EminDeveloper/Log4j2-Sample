@@ -121,7 +121,7 @@ For example, you can configure a primary JDBCAppender, with a secondary the Roll
     </span><span class="tag">&lt;/JDBC&gt;</span><span class="pln">
 </span><span class="tag">&lt;/Appenders&gt;</span></pre>
 
-<p>Overall, this filtering mechanism can be used with great precision to make sure each appender in your overall logging configuration is tracking the right information. The ability to only log very specific and relevant information generally leads to <strong>very quick root cause analysis, especially in complex systems&nbsp;</strong>– especially when coupled with <a href="https://stackify.com/best-log-viewer-prefix/">a powerful log viewing tool</a>.</p>
+<p>Overall, this filtering mechanism can be used with great precision to make sure each appender in your overall logging configuration is tracking the right information. The ability to only log very specific and relevant information generally leads to <strong>very quick root cause analysis, especially in complex systems&nbsp;</strong>– especially when coupled with a powerful log viewing tool.</p>
 <h3><strong>Configuring Loggers</strong></h3>
 <p>Besides the <em>Root</em> logger, we can also define additional <em>Logger</em> elements with different log levels, appenders or filters. Each <em>Logger</em> requires a name that can be used later to reference it:</p>
 <pre class="prettyprint prettyprinted" style=""><span class="tag">&lt;Loggers&gt;</span><span class="pln">
