@@ -8,8 +8,11 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 public class LogApp {
+
     static Logger log = LogManager.getLogger(LogApp.class.getName());
+
     public static void main(String[] args) throws IOException {
+
         System.out.println("/******* Choose a number *******/ \n");
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         int number = Integer.valueOf(br.readLine());
