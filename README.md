@@ -1,6 +1,6 @@
 # Log4j2-Sample
 
-### Basic Log4j2 Configuration
+#### Basic Log4j2 Configuration
 To start using log4j2 in your project, you simply need to add the log4j-core dependency.
 
 Out of the box, log4j2 will automatically provide a simple configuration, if you don’t explicitly define one yourself. The default configuration logs to the console at a level of ERROR level or above.
