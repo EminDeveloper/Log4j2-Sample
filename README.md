@@ -1,6 +1,6 @@
 # Log4j2-Sample
 
-### Basic Log4j2 Configuration
+#### Basic Log4j2 Configuration
 To start using log4j2 in your project, you simply need to add the log4j-core dependency.
 
 Out of the box, log4j2 will automatically provide a simple configuration, if you don’t explicitly define one yourself. The default configuration logs to the console at a level of ERROR level or above.
@@ -121,7 +121,7 @@ For example, you can configure a primary JDBCAppender, with a secondary the Roll
     </span><span class="tag">&lt;/JDBC&gt;</span><span class="pln">
 </span><span class="tag">&lt;/Appenders&gt;</span></pre>
 
-<p>Overall, this filtering mechanism can be used with great precision to make sure each appender in your overall logging configuration is tracking the right information. The ability to only log very specific and relevant information generally leads to <strong>very quick root cause analysis, especially in complex systems&nbsp;</strong>– especially when coupled with <a href="https://stackify.com/best-log-viewer-prefix/">a powerful log viewing tool</a>.</p>
+<p>Overall, this filtering mechanism can be used with great precision to make sure each appender in your overall logging configuration is tracking the right information. The ability to only log very specific and relevant information generally leads to <strong>very quick root cause analysis, especially in complex systems&nbsp;</strong>– especially when coupled with a powerful log viewing tool.</p>
 <h3><strong>Configuring Loggers</strong></h3>
 <p>Besides the <em>Root</em> logger, we can also define additional <em>Logger</em> elements with different log levels, appenders or filters. Each <em>Logger</em> requires a name that can be used later to reference it:</p>
 <pre class="prettyprint prettyprinted" style=""><span class="tag">&lt;Loggers&gt;</span><span class="pln">
@@ -187,7 +187,7 @@ ctx</span><span class="pun">.</span><span class="pln">updateLoggers</span><span 
 pLogger</span><span class="pun">.</span><span class="pln">info</span><span class="pun">(</span><span class="str">"Programmatic Logger Message"</span><span class="pun">);</span></pre>
 <p>This style of fluent API can lead to a quicker development and iteration on more complex logging configurations because you’re now benefiting from <strong>the benefits of working directly with Java code</strong>.</p>
 <p>However, given that XML can still be more readable and compact, you can often develop the configuration programmatically and then convert it to XML when everything’s done.</p>
-<p><span data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;Try Stackify's free code profiler, Prefix, to write better code on your workstation. Prefix works with .NET, Java, PHP, Node.js, Ruby, and Python. &quot;}" data-sheets-userformat="{&quot;2&quot;:769,&quot;3&quot;:{&quot;1&quot;:0},&quot;11&quot;:4,&quot;12&quot;:0}">Try Stackify’s free code profiler, <a href="https://stackify.com/prefix/" target="_blank" rel="noopener noreferrer">Prefix</a>, to write better code on your workstation. Prefix works with .NET, Java, PHP, Node.js, Ruby, and Python. </span></p>
+
 <h3><strong>Custom Log Levels</strong></h3><p>The built-in log levels for log4j2 are:</p>
 <ul>
 <li>OFF</li>
@@ -203,7 +203,7 @@ pLogger</span><span class="pun">.</span><span class="pln">info</span><span class
 <p>For example, to define this new log level, you can make use of the <em>Level.forName()</em>&nbsp;API – specifying the new level name and an integer that represents the place of the level in the log levels hierarchy:</p>
 <pre class="prettyprint prettyprinted" style=""><span class="typ">Level</span><span class="pln"> myLevel </span><span class="pun">=</span><span class="pln"> </span><span class="typ">Level</span><span class="pun">.</span><span class="pln">forName</span><span class="pun">(</span><span class="str">"NEW_LEVEL"</span><span class="pun">,</span><span class="pln"> </span><span class="lit">350</span><span class="pun">);</span></pre>
 <p>To determine what integer value to use, you can have a look at the values defined for the other log levels in the <a href="https://logging.apache.org/log4j/2.x/manual/customloglevels.html" target="_blank" rel="noopener noreferrer">log4j2 documentation</a>:</p>
-<p><img src="https://stackify.com/wp-content/uploads/2017/06/logs-300x270.png" alt="" width="300" height="270" class="alignnone size-medium wp-image-11871 no-lazyload"></p>
+<p><img src="https://user-images.githubusercontent.com/26926048/160784467-4006bc26-5e78-40bd-a22e-acb2e511cd66.png" alt="" width="300" height="270" class="alignnone size-medium wp-image-11871 no-lazyload"></p>
 <p>The <em>350</em> value puts the level between WARN and INFO, which means the messages will be displayed when the level is set to INFO or above.</p>
 <p>To log a message at the custom level, you need to use the<em> log()</em> method:</p>
 <pre class="prettyprint prettyprinted" style=""><span class="pln">logger</span><span class="pun">.</span><span class="pln">log</span><span class="pun">(</span><span class="pln">myLevel</span><span class="pun">,</span><span class="pln"> </span><span class="str">"Custom Level Message"</span><span class="pun">);</span></pre>
@@ -254,12 +254,9 @@ pLogger</span><span class="pun">.</span><span class="pln">info</span><span class
 
 <p><strong>Log4j2 is a powerful and robust logging solution for modern Java applications</strong>, with a wide range of configuration options.</p>
 
-<p>It allows for easy configuration of advanced logging best practices such as rolling files, different types of logging output destinations, support for&nbsp;<a href="https://stackify.com/what-is-structured-logging-and-why-developers-need-it/">structured logging</a> formats such as JSON or XML, using multiple loggers and filters, and custom log levels.</p>
+<p>It allows for easy configuration of advanced logging best practices such as rolling files, different types of logging output destinations, support for&nbsp;<a>structured logging</a> formats such as JSON or XML, using multiple loggers and filters, and custom log levels.</p>
 
-<p>Finally, when you need to go beyond manually analyzing log data, definitely check out the logging capabilities included in <a href="https://stackify.com/retrace/">Retrace</a> APM.</p>
-
-
-
+<p>Finally, when you need to go beyond manually analyzing log data, definitely check out the logging capabilities included in <a>Retrace</a> APM.</p>
 
 
 
