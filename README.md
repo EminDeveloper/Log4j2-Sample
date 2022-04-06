@@ -1,4 +1,4 @@
-# Log4j2-Sample
+## Log4j2-Sample
 
 #### Basic Log4j2 Configuration
 To start using log4j2 in your project, you simply need to add the log4j-core dependency.
@@ -258,7 +258,7 @@ pLogger</span><span class="pun">.</span><span class="pln">info</span><span class
 
 <p>Finally, when you need to go beyond manually analyzing log data, definitely check out the logging capabilities included in <a>Retrace</a> APM.</p>
 
-
+  
 
 
 
