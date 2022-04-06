@@ -12,7 +12,7 @@ Then you can use the logger object with methods corresponding to the log level y
 
 <pre class="prettyprint prettyprinted" style=""><span class="pln">logger</span><span class="pun">.</span><span class="pln">info</span><span class="pun">(</span><span class="str">"This is information message"</span><span class="pun">);</span></pre>
 
-## Customizing the Log4j2 Configuration
+#### Customizing the Log4j2 Configuration
 A custom log4j2 configuration can be created either programmatically or through a configuration file.
 
 The library supports config files written in XML, JSON, YAML, as well as the .properties format. Here, we’re going to use XML to discuss all examples primarily.
